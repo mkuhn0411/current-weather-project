@@ -21,6 +21,7 @@
                     <p class="time">{{ citySunset }} PM</p>
                 </div>
             </div>
+            <p class="asterisk">*Times reflect your timezone</p>
         </div>
     </div>
 </template>
@@ -183,6 +184,10 @@ export default {
         background-image: url(https://s3.amazonaws.com/jebbit-assets/images/GyIlxwsk/business-images/k7hxRVhTQxawXMsOCQ3h_light-rain.png);
         background-color: #0066ff;
         background-position: top;
+    }
+
+    .asterisk {
+        font-size: 0.7em;
     }
 
 </style>

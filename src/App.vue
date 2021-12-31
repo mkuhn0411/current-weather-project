@@ -5,10 +5,10 @@
       <div class="city-container">
         <p 
           :class="{active: activeCity === city}" 
-          @click="setActiveCity(city)" 
+          @click="setActiveCity(city.name, city.key)" 
           v-for="city in cities" 
-          :key="city"
-        >{{city}}</p>
+          :key="city.key"
+        >{{city.name}}</p>
       </div>
       <div v-if="activeCity" class="city-card">
         <city-card 
@@ -34,7 +34,13 @@ export default {
   name: 'App',
   data() {
     return {
-      cities: ['Denver', 'Hurley', 'Berlin', 'Calgary', 'Doha'],
+      cities: [
+        { name: 'Denver', key: 5419384 },
+        { name: 'Hurley', key: 5121679 },
+        { name: 'Berlin', key: 2950159 },
+        { name: 'Calgary', key: 5913490 },
+        { name: 'Doha', key: 290030 },
+      ],
       activeCity: null,
       cityData: null,
       cityName: '',
@@ -47,9 +53,11 @@ export default {
     }
   },
   methods: {
-    setActiveCity(city) {
+    setActiveCity(city, key) {
       this.activeCity = city;
-      this.getWeatherData(city);
+      const id = key;
+
+      this.getWeatherData(this.activeCity, id);
     },
     handleSets(time, type) {
       let unix_timestamp = time;
@@ -61,23 +69,13 @@ export default {
 
       if (type === 'rise') {
         this.citySunrise = formattedTime;
-        console.log(this.citySunrise)
       } else {
         this.citySunset = formattedTime;
       }
     },
-    getWeatherData(city) {
-      const cityIds = {
-        Denver: 5419384,
-        Hurley: 5121679,
-        Berlin: 2950159,
-        Calgary: 5913490,
-        Doha: 290030
-      }
-      const id = cityIds[city];
-
-      fetch('https://api.openweathermap.org/data/2.5/weather?id=' + id + '&units=imperial&appid=6e433fd4f34c477e8ebec3208ff603ad')
-      .then(function(resp) { return resp.json() }) // Convert data to json
+    getWeatherData(city, key) {
+      fetch('https://api.openweathermap.org/data/2.5/weather?id=' + key + '&units=imperial&appid=6e433fd4f34c477e8ebec3208ff603ad')
+      .then(function(resp) { return resp.json() })
       .then(data => {
         console.log(data);
         this.cityData = data;
@@ -91,8 +89,8 @@ export default {
         this.handleSets(data.sys.sunset, 'set');
 
       })
-      .catch(function() {
-        // catch any errors
+      .catch(function(error) {
+        console.log(error);
       });
     }
   }
