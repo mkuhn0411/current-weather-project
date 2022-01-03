@@ -4,7 +4,7 @@
       <h1>What's the Weather Right Now?</h1>
       <div class="city-container">
         <p 
-          :class="{active: activeCity === city}" 
+          :class="{active: activeCity === city.name}" 
           @click="setActiveCity(city.name, city.key)" 
           v-for="city in cities" 
           :key="city.key"
@@ -37,8 +37,9 @@ export default {
         { name: 'Doha', key: 290030 },
       ],
       activeCity: null,
-      cityData: null,
       cityName: '',
+      cityData: null,
+      
     }
   },
   methods: {
